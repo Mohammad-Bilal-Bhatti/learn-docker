@@ -171,6 +171,9 @@ $ docker ps -a
 # run docker in interactive mode.
 $ docker run -it ubuntu
 
+# running an existing docker container.
+$ docker start -t <container-hash>
+
 ```
 
 
@@ -288,6 +291,109 @@ $ tail <filename>
 $ head -10 <filename>
 ```
 ### Redirection
+
+in computer science 
+keyboard is considered as STD-INPUT and
+moniter is considered as STD-OUTPUT devices
+
+but we can chage the direction of that sources - and that concept is called as redirection.
+
+```sh
+# redirect standard output to the file
+$ ps -ef > processes.info
+
+# piping the result of one command into another
+cat /etc/passwd | cut -d ":" -f 1 | sort > users.txt
+```
+
+### Searching for text in files.
+
+grep - global regular expression print
+
+```sh
+# do case insensitive search on /etc/passwd
+$ grep -i root /etc/passwd
+
+# search for pattern in current directory
+$ grep -ir hello .
+
+$ grep -i development /usr/share/common-licenses/GPL-3
+
+$ grep -n "^GNU" /usr/share/common-licenses/GPL-3
+
+```
+
+
+^ - starts with eg. ^GNU
+$ - ends with eg. the$
+. - any character eg. ..cept
+[] - range eg. t[wo]o
+[^] - not in range eg. [^c]ode
+
+
+
+starts with capital letter - "^[A-Z]"
+
+### Finding files and directories
+```sh
+# list all the files with in current directory recursively
+$ find 
+
+# list only the directories recursively
+$ find -type d 
+
+# list only the files with name
+find -type f -name "*.txt"
+
+find / -type f -name "*.py" > python-files.txt
+```
+
+### Chaining commands
+```sh
+# chaining commands using semicolon - all the chained commands will be executed, no matters which commands fails to execute.
+$ mkdir test; cd test; echo "done"
+
+# chainging the commands using && 'and' operator - here next command will be executed if the previous command runs successfully - retruns 0
+$ mkdir test && cd test && echo "done"
+
+# chain commands using '||' or operator
+$ mkdir test || echo "directory already exists..."
+
+# piping the output of one command and give as a input to another command.
+$ ls /bin | less
+```
+
+### Environment variables
+
+we having variables in different programming languages same as we have environment variables. we use environment variables to store application configuration information.  
+
+```sh
+
+# displays list of environment variables.
+printenv
+
+# displays list of environment variables.
+env
+
+# displays the variable's value by its name
+printenv PATH
+
+# another way to print or see environment variables.
+$ echo $PATH
+
+# setting up the environment variable value. - this env varible will only be available to current user session
+$ export DB_USER=mosh
+
+```
+In order to make environment variables persistent - write them in .bashrc files
+
+```sh
+$ echo DB_NAME=students-db >> ~/.bashrc
+
+$ source ~/.bashrc
+ ```
+
+> Note: never store any sensitive information in environment variables eg. db passwords etc...
 
 
 
