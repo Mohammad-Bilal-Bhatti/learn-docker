@@ -154,31 +154,152 @@ $ docker pull ubuntu
 
 # run image - download if not available locally
 $ docker run ubuntu
+
+
+
+
+```
+
+when we run ubuntu image - behind the scene - docker created container using that image, since we didn't interact with the container, container shuts down immediately.
+
+proof
+```sh
+
+# list all the docker processes.
+$ docker ps -a
+
+# run docker in interactive mode.
+$ docker run -it ubuntu
+
 ```
 
 
+### Package Managers
+
+These days most of the Operating systems and development tools comes with the package mangers.
+eg. pip, npm, yarn, maven, choco, apt, apt-get, Nuget, brew, etc...
+
+
+apt - advance package tool - is a package manager for debian based distributions
+
+```sh
+# list all the packages installed/not-installed from package database.
+$ apt list 
+
+# search the package by its name from package database.
+$ apt search <package-name>
+
+# updates the package database.
+$ sudo apt update
+
+# install package by its name
+$ sudo apt install <package-name>
+
+# un-install package by its name
+$ sudo apt uninstall <package-name>
+```
+
+### Linux file system
+
+in linux or windows or other operating system our files are organized in the form of tree like structure - hierarical structure.
+
+c:/
+  Program Files
+  Windows
+  Users
+
+/
+  usr/
+  bin/      contains binary programs
+  home/
+  etc/      contains all editable configuration files for different applications.
+  boot/     contains all files related to boot process
+  dev/      contains all devices related information
+  lib/
+  proc/     contains all processes information
+  root/
+  var/      contains files that are changed frequently eg. log files etc...
+
+In the world of linux every-thing is a file - devices, processes, pipes, network sockets and so on...
+
+
+### Navigating between directories
+
+```sh
+# navigate between directories
+$ cd /etc
+
+# navigate one directory back
+$ cd ../
+
+# navigate to users home directory
+$ cd ~
+```
+
+### Working with files and directories
+
+```sh
+# creating new directory
+$ mkdir temp
+
+# creating new file
+$ touch file
+
+# re-naming files and directories
+$ mv old-name new-name
+
+# moving file here and there
+# mv <source> <destination>
+
+# removing file
+$ rm file
+
+# removing empty directory
+$ rmdir temp
+
+# removing directory with files
+$ rm -r temp
+```
+### Editing and viewing files
+
+```sh
+# editing file within terminal using basic terminal based editor - nano
+$ nano <filename>
+
+# editing file within terminal using advance text editor - vim
+$ vim <filename>
+
+# dump the content of the file to the terminal
+$ cat <filename>
+
+# display the file's content in paginated format - quite useful when the file text is large
+$ more <filename>
+
+# displays the file's content in a more convinent fashion - you can scroll up and down easilly
+$ less <filename>
+
+# displays the top 5 lines of the file
+$ head <filename>
+
+# displays the trailing 5 lines of the file
+$ tail <filename>
+
+# displays top 10 lines
+$ head -10 <filename>
+```
+### Redirection
 
 
 
 
 
+## Building images
 
-### Building images
-
-
-### Working with containers
+## Working with containers
 
 
-### Running multi container application
+## Running multi container application
 
 
-### Deploying application
-
-
-
-
-## Progress Track
-
-ch-1    15-Sept-2021
-ch-2.3  15-Sept-2021 
+## Deploying application
 
