@@ -488,16 +488,135 @@ $ chmod u+x <file>
 
 ```
 
-
-
-
 ## Building images
+
+The first set to build and deploy application using docker is to build images. So, having solid understanding of images is crucial. 
+
+In this section
+- Creating docker files.
+- versioning images 
+- sharing images
+- saving and loading them
+- reducing image size
+- speeding up builds
+
+Images vs containers
+
+container
+- container is running form of an image.
+- provides an isolated environment to ran application(s) - a kind of virtual machine.
+- can be stopped and restarted just like VMs
+- Is just a process - special kind of process
+
+Note: A container gets the file system from its image. But each container has its own right layer. So what we do in one container is invisible to other containers. 
+
+In a nutshell what ever happens inside one container universe - is invisible to other container universe. Although there is some file sharing mechanism, that will be discussed later. 
+
+image
+- an image is simply package of all of its dependencies eg. lib, configs, etc...
+- an image contains every thing that application needs to run. eg. cut-down OS, third parties libraries, application files and environment variables. - in nutshell it contains all the configuration settings required to run an application - and typicaally can start a container from it. 
+ 
+Dockerizing the react application.
+Steps
+1. Install Node
+2. Download App dependencies ```$ npm install```
+3. Start the application ```$ npm start```
+
+
+### Docker file instructions
+
+the first step in dockerizing the application we create a docker file of it. A docker file contains a set of instruction for building an image.
+
+Docker Instruction set
+- FROM		specifies base image
+- WORKDIR	working directory to work with
+- COPY		used to copy files
+- ADD
+- RUN		used to run operating system commands
+- ENV		for setting env variables
+- EXPOSE	for telling docker to run appilcation on given port
+- USER		for specifying user that can run the application
+- CMD		specifies the commands should be executed when we start the container.
+- ENTRYPOINT
+
+
+### Choosing the right base image
+
+base image is usually cut-down operating system OR operating system with runtime environment.
+
+
+
+```dockerfile
+
+FROM node:16.10.0-alpine3.13
+
+```
+
+Note: if you write node:latest it will download the latest version everytime and it is not practical at all...
+
+```sh
+# build image from docker file.
+$ docker build -t <tag-name> <source-dir>
+
+# build an image from docker file present in the current dir and name it to 'demo-app'
+$ docker build -t demo-app .
+
+# list available docker images locally
+$ docker images
+
+or
+$ docker image ls
+
+# running the build image.
+$ docker run -it demo-app
+
+# running the build image with shell.
+$ docker run -it demo-app sh
+
+```
+
+```dockerfile
+
+FROM node:14.6.0-alpine3.13
+WORKDIR /app
+COPY . .
+
+```
+
+Note: ADD command will have 2 magic in it.
+1. automatically uncompress the compressed file when you want to add.
+2. having support to copy files from some url.
+
+# re-build the application.
+$ docker build -t react-demo .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 ## Working with containers
 
-
 ## Running multi container application
-
 
 ## Deploying application
 
