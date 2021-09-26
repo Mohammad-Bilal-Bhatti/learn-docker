@@ -395,6 +395,98 @@ $ source ~/.bashrc
 
 > Note: never store any sensitive information in environment variables eg. db passwords etc...
 
+### Managing processes
+
+A process is the instance of running program.
+
+in linux/unix world to find the list of processes or programs we use the following commands
+
+```sh
+# list the current running processes
+$ ps
+
+# runs a background process
+$ sleep 100 &
+
+# kill the process by its process id
+$ kill -9 <pid>
+```
+
+
+### Managing users
+
+- useradd - For adding user
+- usermod - For modifying user info
+- userdel - For deleting user
+- adduser - More interactive command for adding user.
+
+```sh
+
+# will create user jhon and create its home directory - for varifying check /etc/passwd file
+$ useradd -m jhon
+
+# change the shell of user jhon to bash
+$ usermod -s /bin/bash jhon
+
+```
+
+
+```sh
+# syntax for executing command against container id
+$ docker exec <container-hash> <command>
+
+# attach to the container in interactive mode.
+$ docker exec -it fc321 bash
+
+# attach to the container as jhon in interactive mode.
+$ docker exec -it -u jhon fc321 bash
+```
+
+### managing groups
+
+similarly like managing users we have commands for managing groups
+- groupadd
+- groupmod
+- groupdel
+
+in linux every user have its
+- primary group - only one
+- secondary/suplimentry group - zero or more
+
+this is because when user creates a file is belongs to the single user and single group
+
+```sh
+# add the group by name - to verify view /etc/group
+$ groupadd developers
+
+# add jhon to the developers group.
+$ usermod -G developers jhon
+```
+
+### user permissions
+
+x - execute
+r - read 
+w - write
++ - for add
+- - for remove
+u - user
+g - group
+o - others
+
+Numerical weights
+4 - read
+2 - write
+1 - execute
+
+```sh
+# check file permissions
+$ ls -l
+
+# add execute permission
+$ chmod u+x <file>
+
+```
 
 
 
