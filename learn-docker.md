@@ -649,12 +649,86 @@ when we try to start the application inside the container it will open port insi
 So the the same machine we can have multiple containers running the same image. All the containers will be listening to the same port. Port on the host machine is not going to be mapped with these containers.
 
 ```dockerfile
-
 EXPOSE 3000
-
 ```
 
 the above command will not bind the host port with the container port - but it the good to write it for better documentation
+
+### Setting the user
+
+by default docker runs on our application by root user - that has the highest previliges. That can create security holes in our system. So inorder to run the application we have to create the user with limited previliges.
+
+```sh
+
+# for demonstration purposes
+$ docker run -it alpine
+
+# create group app.
+$ addgroup app
+
+# creating system user with group
+$ adduser -S -G app app
+
+# displays the groups of the app user - cross validate
+$ groups app
+
+```
+
+```dockefile
+RUN addgroup app && adduser -S -G app app
+USER app
+```
+
+### Defining Entry points
+
+Shell form
+
+```dockerfile
+CMD npm start
+```
+
+Exec form - `best practice`
+
+```dockerfile
+CMD ["npm", "start"]
+```
+
+since the command instuction is the entry point command. so using multiple CMD instuction will not take effect - only the last one. So it is better to have single one.
+
+Difference between RUN and CMD
+
+- RUN command is executed at the time of building the image, build time instruction
+- While CMD command is run time instruction. It is executed when we start the container.
+
+Note: when ever we supply the CMD instruction it will be replced by the command while starting the container eg. `$ docker run image-name sh`
+
+here sh will be repaced by the CMD if passed from back, otherwise CMD will be executed.
+
+Note: we can always overwrite the the default command when starting the container.
+
+We can not easilly overwrite ENTRYPOINT when running the container until we pass some arguments.
+
+```sh
+$ docker run demo-app --entrypoint <cmd>
+```
+
+In practice we always use ENTRYPOINT when we are sure that 'this is the command' should always be executed when we need to start the container - no execption
+
+while for CMD instruction we always have flexability to overwrite
+
+```dockerfile
+FROM node:14.16.0-alpine3.13
+RUN addgroup app && adduser -S -G app app
+USER app
+WORKDIR /app
+COPY . .
+RUN npm install
+ENV BASE_URL=https://api.github.com/
+EXPOSE 3000
+ENTRYPOINT ["npm", "start"]
+```
+
+### Speeding up builds
 
 ## Working with containers
 
