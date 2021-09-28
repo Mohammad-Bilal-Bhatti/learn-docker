@@ -4,31 +4,31 @@
 - end-date: ???
 - instructor: Mosh Hamadani
 
-
 ## Getting started.
 
 A comprehensive course that will teach you how to work with docker from basic to more advance user.
 And will deploy application using docker both front-end, backend, and database.
 
 What you need to know
+
 - atleast 3 months of programming experience.
 - atleast have concept of front-end, backend, apis, and databases.
 - familarity with basic git commands.
 
 How to take this course
+
 - while listening to the lectures you should take notes as well - because this course is highly practical
 - after each course repeat the steps by your own.
-
 
 ## Introduction to docker
 
 Agenda
+
 - What is docker
 - Virtual Machines vs containers.
 - Architecture of docker.
 - Installing docker.
 - Development workflow.
-
 
 ### What is docker
 
@@ -38,27 +38,25 @@ because if your application is running on your machine, it can run and function 
 > Common Developer Argument: It is working on my machine.
 
 Possible reasons of above problem
+
 - Files and libraries missing.
-- software version mismatch. eg. Required: Node v14 but other machine is running Node v12 
+- software version mismatch. eg. Required: Node v14 but other machine is running Node v12
 - different configuration settings.
 
 This is where docker comes into action.
 
 With the help of docker we can package our application what it needs and run it anywhere on any machine - that runs docker.
 
-
 It also helps other team members who have joined your team for setting up the development environment and waste half of the day
 
 Docker with then automatically mannages the dependencies the application requires and also creates an isolated environments - called 'container'
-and this is the beauty of docker - these isolated environments allows different versions of software side by side. 
-
+and this is the beauty of docker - these isolated environments allows different versions of software side by side.
 
 It also enable us to remove those depencies that are not required when the project is done, with out messing up the things :)
 
 In a nutshell
 
 > Docker is a solution for consistently build, run, and ship applications...
-
 
 ** Important **
 Docker uses client server architecture. It has a client component that talks to the server using restfull APIs. The server is also called Docker Engine (or deamon), that runs in the background and is responsible for doing the actual work.
@@ -73,57 +71,56 @@ We can share our images by publishing them on Docker registory. The most popular
 
 > Remember: the images and containers in the Windows world are invisible to the linux world. You would needs Windows containers only if you need an image that starts from Windows.
 
-
 #### Virtual Machines vs Containers
 
 Container
-- an isolated environment for running an applications. Its essentailly an operating system process with its own file system. 
+
+- an isolated environment for running an applications. Its essentailly an operating system process with its own file system.
 
 Virtual Machines
-- An abstraction of machine or physical hardware or hardware resources. With the help of hypervisor we can create and manage virtual machines.
- 
-kernal
-- It is the core of the operating system. It is the part that manages applications and hardware resources. Different OS kernal have their own different APIs. That is why we can not linux application on windows and viceversa. 
 
+- An abstraction of machine or physical hardware or hardware resources. With the help of hypervisor we can create and manage virtual machines.
+
+kernal
+
+- It is the core of the operating system. It is the part that manages applications and hardware resources. Different OS kernal have their own different APIs. That is why we can not linux application on windows and viceversa.
 
 [ linux ] - [ win ] - [ mac ]
-               |
-         [ Hypervisor ]
-               |
-         [ Hardware ]
-
+|
+[ Hypervisor ]
+|
+[ Hardware ]
 
 For running docker on windows - First, enable feature windows subsystem for linux. Because now windows makers ships 'linux-kernal' along with 'windows-kernal'
 
-
 Hypervisors
+
 - Virtual box
 - Vm ware
 - hyper-v (windows-only)
 
 With the help of hypervisor we can run different virtual machines. And on each virtal machine we can install OS of our own choice.
 
-
 virtual machines are helpfull but they have different problems with current model.
+
 - each vm needs a full blown os - memory and cpu wastage, licenced, patched, and moniter.
 - slow to start
 - resource intensive.
 
-
 Containers
+
 - gives us same kind of isolation that vm provides.
 - are more lightweight.
 - use the OS of the host.
 - start quickly.
 - need less hardware resources.
 
-
 ## The linux command line
 
 Why linux command line?
-  Because Docker is build on basic of linux concepts. 
-  Most docker tutorials are based on linux commands.
-  
+Because Docker is build on basic of linux concepts.
+Most docker tutorials are based on linux commands.
+
 Learning linux is like learning english.
 
 ### Linux distributions/distros
@@ -133,13 +130,14 @@ Learning linux is like learning english.
 - Each distribution have some specialized reson behind its construction eg. Running servers, Running super computers, Running small embeded devices, Running desktop etc
 
 Famous distros
+
 - Ubuntu
 - Debian
 - Alpine
 - Fedora
 - CentOs
 
-Most of the distributions shares same set of commands, but not all - Be aware of the difference incase of package managers, user-management, and so on. 
+Most of the distributions shares same set of commands, but not all - Be aware of the difference incase of package managers, user-management, and so on.
 
 ### Running Ubuntu
 
@@ -163,6 +161,7 @@ $ docker run ubuntu
 when we run ubuntu image - behind the scene - docker created container using that image, since we didn't interact with the container, container shuts down immediately.
 
 proof
+
 ```sh
 
 # list all the docker processes.
@@ -176,18 +175,16 @@ $ docker start -t <container-hash>
 
 ```
 
-
 ### Package Managers
 
 These days most of the Operating systems and development tools comes with the package mangers.
 eg. pip, npm, yarn, maven, choco, apt, apt-get, Nuget, brew, etc...
 
-
 apt - advance package tool - is a package manager for debian based distributions
 
 ```sh
 # list all the packages installed/not-installed from package database.
-$ apt list 
+$ apt list
 
 # search the package by its name from package database.
 $ apt search <package-name>
@@ -207,24 +204,23 @@ $ sudo apt uninstall <package-name>
 in linux or windows or other operating system our files are organized in the form of tree like structure - hierarical structure.
 
 c:/
-  Program Files
-  Windows
-  Users
+Program Files
+Windows
+Users
 
 /
-  usr/
-  bin/      contains binary programs
-  home/
-  etc/      contains all editable configuration files for different applications.
-  boot/     contains all files related to boot process
-  dev/      contains all devices related information
-  lib/
-  proc/     contains all processes information
-  root/
-  var/      contains files that are changed frequently eg. log files etc...
+usr/
+bin/ contains binary programs
+home/
+etc/ contains all editable configuration files for different applications.
+boot/ contains all files related to boot process
+dev/ contains all devices related information
+lib/
+proc/ contains all processes information
+root/
+var/ contains files that are changed frequently eg. log files etc...
 
 In the world of linux every-thing is a file - devices, processes, pipes, network sockets and so on...
-
 
 ### Navigating between directories
 
@@ -263,6 +259,7 @@ $ rmdir temp
 # removing directory with files
 $ rm -r temp
 ```
+
 ### Editing and viewing files
 
 ```sh
@@ -290,9 +287,10 @@ $ tail <filename>
 # displays top 10 lines
 $ head -10 <filename>
 ```
+
 ### Redirection
 
-in computer science 
+in computer science
 keyboard is considered as STD-INPUT and
 moniter is considered as STD-OUTPUT devices
 
@@ -323,24 +321,22 @@ $ grep -n "^GNU" /usr/share/common-licenses/GPL-3
 
 ```
 
-
 ^ - starts with eg. ^GNU
 $ - ends with eg. the$
 . - any character eg. ..cept
 [] - range eg. t[wo]o
 [^] - not in range eg. [^c]ode
 
-
-
 starts with capital letter - "^[A-Z]"
 
 ### Finding files and directories
+
 ```sh
 # list all the files with in current directory recursively
-$ find 
+$ find
 
 # list only the directories recursively
-$ find -type d 
+$ find -type d
 
 # list only the files with name
 find -type f -name "*.txt"
@@ -349,6 +345,7 @@ find / -type f -name "*.py" > python-files.txt
 ```
 
 ### Chaining commands
+
 ```sh
 # chaining commands using semicolon - all the chained commands will be executed, no matters which commands fails to execute.
 $ mkdir test; cd test; echo "done"
@@ -365,7 +362,7 @@ $ ls /bin | less
 
 ### Environment variables
 
-we having variables in different programming languages same as we have environment variables. we use environment variables to store application configuration information.  
+we having variables in different programming languages same as we have environment variables. we use environment variables to store application configuration information.
 
 ```sh
 
@@ -385,13 +382,14 @@ $ echo $PATH
 $ export DB_USER=mosh
 
 ```
+
 In order to make environment variables persistent - write them in .bashrc files
 
 ```sh
 $ echo DB_NAME=students-db >> ~/.bashrc
 
 $ source ~/.bashrc
- ```
+```
 
 > Note: never store any sensitive information in environment variables eg. db passwords etc...
 
@@ -412,7 +410,6 @@ $ sleep 100 &
 $ kill -9 <pid>
 ```
 
-
 ### Managing users
 
 - useradd - For adding user
@@ -430,7 +427,6 @@ $ usermod -s /bin/bash jhon
 
 ```
 
-
 ```sh
 # syntax for executing command against container id
 $ docker exec <container-hash> <command>
@@ -445,11 +441,13 @@ $ docker exec -it -u jhon fc321 bash
 ### managing groups
 
 similarly like managing users we have commands for managing groups
+
 - groupadd
 - groupmod
 - groupdel
 
 in linux every user have its
+
 - primary group - only one
 - secondary/suplimentry group - zero or more
 
@@ -466,13 +464,15 @@ $ usermod -G developers jhon
 ### user permissions
 
 x - execute
-r - read 
+r - read
 w - write
-+ - for add
-- - for remove
-u - user
-g - group
-o - others
+
+- - for add
+
+* - for remove
+    u - user
+    g - group
+    o - others
 
 Numerical weights
 4 - read
@@ -490,11 +490,12 @@ $ chmod u+x <file>
 
 ## Building images
 
-The first set to build and deploy application using docker is to build images. So, having solid understanding of images is crucial. 
+The first set to build and deploy application using docker is to build images. So, having solid understanding of images is crucial.
 
 In this section
+
 - Creating docker files.
-- versioning images 
+- versioning images
 - sharing images
 - saving and loading them
 - reducing image size
@@ -503,48 +504,48 @@ In this section
 Images vs containers
 
 container
-- container is running form of an image.
+
+- container is running instance of an image.
 - provides an isolated environment to ran application(s) - a kind of virtual machine.
 - can be stopped and restarted just like VMs
 - Is just a process - special kind of process
 
-Note: A container gets the file system from its image. But each container has its own right layer. So what we do in one container is invisible to other containers. 
+Note: A container gets the file system from its image. But each container has its own right layer. So what we do in one container is invisible to other containers.
 
-In a nutshell what ever happens inside one container universe - is invisible to other container universe. Although there is some file sharing mechanism, that will be discussed later. 
+In a nutshell what ever happens inside one container universe - is invisible to other container universe. Although there is some file sharing mechanism, that will be discussed later.
 
 image
+
 - an image is simply package of all of its dependencies eg. lib, configs, etc...
-- an image contains every thing that application needs to run. eg. cut-down OS, third parties libraries, application files and environment variables. - in nutshell it contains all the configuration settings required to run an application - and typicaally can start a container from it. 
- 
+- an image contains every thing that application needs to run. eg. cut-down OS, third parties libraries, application files and environment variables. - in nutshell it contains all the configuration settings required to run an application - and typicaally can start a container from it.
+
 Dockerizing the react application.
 Steps
-1. Install Node
-2. Download App dependencies ```$ npm install```
-3. Start the application ```$ npm start```
 
+1. Install Node
+2. Download App dependencies `$ npm install`
+3. Start the application `$ npm start`
 
 ### Docker file instructions
 
 the first step in dockerizing the application we create a docker file of it. A docker file contains a set of instruction for building an image.
 
 Docker Instruction set
-- FROM		specifies base image
-- WORKDIR	working directory to work with
-- COPY		used to copy files
-- ADD
-- RUN		used to run operating system commands
-- ENV		for setting env variables
-- EXPOSE	for telling docker to run appilcation on given port
-- USER		for specifying user that can run the application
-- CMD		specifies the commands should be executed when we start the container.
-- ENTRYPOINT
 
+- FROM specifies base image
+- WORKDIR working directory to work with
+- COPY used to copy files
+- ADD
+- RUN used to run operating system commands
+- ENV for setting env variables
+- EXPOSE for telling docker to run appilcation on given port
+- USER for specifying user that can run the application
+- CMD specifies the commands should be executed when we start the container.
+- ENTRYPOINT
 
 ### Choosing the right base image
 
 base image is usually cut-down operating system OR operating system with runtime environment.
-
-
 
 ```dockerfile
 
@@ -565,6 +566,7 @@ $ docker build -t demo-app .
 $ docker images
 
 or
+
 $ docker image ls
 
 # running the build image.
@@ -583,40 +585,79 @@ COPY . .
 
 ```
 
+Note: For any image that exists outside the docker hub repository - we have to mention its full path
+
+> `Buster` images are linux-v10 images eg. 14.16.0-buster
+
+eg. `FROM mcr.microsoft.com/dotnet/core/sdk:3.1`
+
 Note: ADD command will have 2 magic in it.
+
+Note: When you do not specify the version of the image docker by default pulls out latest image
+
 1. automatically uncompress the compressed file when you want to add.
 2. having support to copy files from some url.
 
+After some changes in the dockerfile you can easilly rebuild the entire application.
+
+```sh
+
 # re-build the application.
 $ docker build -t react-demo .
+```
 
+when we execute the build command, docker client sends the content of the mentioned directory to the docker engine (build context). And then docker engine executes the commands mentioned in the dockerfile oneby one - that is by docker doesn't have access outside of the mentioned directory during time of build.
 
+`COPY <context-file/dir> <image-dir>`
 
+`COPY ["<file1>", "<file2>", "<image-dir>"]`
 
+When we spcify the WORKDIR then we can then specify relative paths to copy with reference to WORKDIR
 
+### Excluding files and directorities
 
+```.dockerignore
 
+node_modules/
 
+```
 
+ignoring files and directories that are un-necessary would be very helpfull in reducing the size of the context directory, that we sent to docker engine. It saves alot of time in sending lots of file and ultimately speeds deplying and building apps.
 
+### Running Commands
 
+RUN directive is used to specify the commands that should be run. It could be any possible linux command that is required after copying the source files.
 
+```dockerfile
+# will install node-modules
+RUN npm install
+```
 
+### Setting environment variables.
 
+```dockerfile
 
+ENV ENVIRONMENT=production
+ENV BASE_URL=http://www.api.github.com/repos
 
+```
 
+### Exposing Ports
 
+when we try to start the application inside the container it will open port inside the container itself - Not on the host.
 
+So the the same machine we can have multiple containers running the same image. All the containers will be listening to the same port. Port on the host machine is not going to be mapped with these containers.
 
+```dockerfile
 
+EXPOSE 3000
 
+```
 
- 
+the above command will not bind the host port with the container port - but it the good to write it for better documentation
 
 ## Working with containers
 
 ## Running multi container application
 
 ## Deploying application
-
