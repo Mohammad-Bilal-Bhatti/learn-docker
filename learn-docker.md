@@ -730,6 +730,155 @@ ENTRYPOINT ["npm", "start"]
 
 ### Speeding up builds
 
+Concept of Layers in docker images
+
+- an image is collectively collection of layers.
+- you can thing of layers as seperate filesystem.
+
+All the instuctions sepertely in the dockerfile could be treated as single layer
+
+```
+# get the layers information of an image
+$ docker history <image-name>
+```
+
+Docker has the optimization mechanism built into it. So next time we tell docker to build the image. It looks for the first instuction and see if the instruction is changed or not. If it is not changed, it is not going to rebuild this layer, it is going to reuse it from cache. Docker do the same process for every instruction it reads from dockerfile.
+
+But for the COPY instruction it sees the actual content of the directory and files - it any of the line changes - docker re-runs the current instruction all the preceding instructions.
+
+Optimized docker file for faster builds.
+
+```dockerfile
+FROM node:14.16.0-alpine3.13
+RUN addgroup app && adduser -S -G app app
+USER app
+WORKDIR /app
+COPY package*.json .
+RUN npm install
+COPY . .
+ENV BASE_URL=https://api.github.com/
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+#### Important To Note - _Optimization Technique_
+
+We should organize the dockerfile in a manner that instruction that are quite often changes should come at last.
+
+dockerfile
+
+stable-instructions -----> changing-instructions
+
+### Removing images
+
+```sh
+# auto remove all the dengling images
+$ docker image prune
+
+# remove all stoped containers from $ docker ps -a
+$ docker container prune
+
+$ docker image rm <image-id>
+or
+$ docker image rm <image-name>
+```
+
+### Tagging the images
+
+```sh
+# tagging an image while building it
+$ docker build -t react-demo:1.2.2 .
+
+# tagging an image after its build
+$ docker image tag <image-id> <tag>
+```
+
+> Note: it doesnt mean that image with latest tag is actually the latest image.
+
+### Sharing images.
+
+0. Goto docker hub.
+1. Create account it - its totally free.
+2. Create new repository.
+3. `$ docker login`
+4. `$ docker push <image-name>`
+
+### Sharing images without dockerhub
+
+```sh
+# saving the image
+$ docker image save -o react-app.image.tar react-app:v3
+
+# loading the saved image
+$ docker image load -i react-app.image.tar
+
+# for getting help
+$ docker image save --help
+$ docker image load --help
+```
+
+### Chapter summary
+
+#### Docker file instructions
+
+- FROM # to specify the base image
+- WORKDIR # to set the working directory
+- COPY # to copy files/directories
+- ADD # to copy files/directories
+- RUN # to run commands
+- ENV # to set environment variables
+- EXPOSE # to document the port the container is listening on
+- USER # to set the user running the app
+- CMD # to set the default command/program
+- ENTRYPOINT # to set the default command/program
+
+#### Image Commands
+
+```sh
+$ docker build -t <name> .
+$ docker images
+$ docker image ls
+$ docker run -it <image> sh
+```
+
+#### Starting and Stopping containers
+
+```sh
+docker stop <containerid>
+docker start <continerid>
+```
+
+#### Removing containers
+
+```sh
+$ docker container rm <containerID>
+$ docker rm <containerID>
+$ docker rm -f <containerID>        # to force the removal
+$ docker container prune            # to remove stopped containers
+```
+
+#### Volumes
+
+```sh
+$ docker volume ls
+$ docker volume create app-data
+$ docker volume inspect app-data
+$ docker run -v app-data:/app/data <image>
+```
+
+#### Copying files between host and container
+
+```sh
+$ docker cp <containerID>:/app/log.txt .
+$ docker cp secret.txt <containerID>:/app
+```
+
+#### Sharing source code with containers.
+
+```sh
+$ docker run -v $(pwd):/app <image>
+```
+
 ## Working with containers
 
 ## Running multi container application
