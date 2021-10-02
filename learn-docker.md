@@ -881,6 +881,244 @@ $ docker run -v $(pwd):/app <image>
 
 ## Working with containers
 
+In this section
+
+- starting and stopping containers.
+- publishing ports.
+- viewing logs.
+- executing commands in containers.
+- removing containers.
+- persisting data using volumes.
+- sharing source code.
+
+### Starting & stopping containers
+
+```sh
+# list docker images.
+$ docker images
+
+# running the container
+$ docker run <image-name>
+
+# list docker running processes
+$ docker ps
+
+# run container in detached mode
+$ docker run -d <image-name>
+
+# giving container name.
+$ docker run -d --name <container-name> <image-name>
+
+# you can start the stoped containers.
+$ docker container start <continer-name>
+
+```
+
+### Viewing logs
+
+viewing log is very important when debugging the application in such cases when our application produces exception and stops working etc...
+
+```sh
+$ docker logs <container-id>
+or
+$ docker logs <container-name>
+
+# docker help
+$ docker logs --help
+
+# -t -> timestamp
+# -n -> last n lines
+# -f -> follow
+$ docker logs -n 5 -t <container>
+```
+
+### Publishing ports
+
+When you starts application inside the container it attaches to the container's OS, not to the host OS.
+
+In order to map the host's PORT with the container PORT we do one-to-one mapping.
+
+```sh
+# run the container and binds host's PORT 80 with container's 3000
+$ docker run -d -p 80:3000 <image>
+
+```
+
+### Executing command in containers
+
+We know that when we start the container it executes the default command written in the docker file.
+
+What if you want to execute the command in running container? while trouble shooting etc...
+
+```ps
+# executing command in running container
+$ docker exec <container> <command>
+
+$ docker exec c1 pwd
+$ docker exec -it c1 sh
+
+```
+
+### Starting and Stopping containers
+
+As we know the container is like light weight virtual machine. We can stop and restart it when every we want.
+
+```sh
+# stopping the container by its name.
+$ docker stop c1
+or
+$ docker container stop c1
+
+# starting the stopped container.
+$ docker start c1
+```
+
+### Removing containers
+
+```sh
+# removing the stopped container.
+$ docker rm <container>
+
+# forcely remove the container.
+$ docker rm -f <container>
+
+# verifying...
+$ docker ps -a | grep <container>
+
+# removing all the stopped containers in one go.
+$ docker container prune
+```
+
+### Container file system
+
+Every container has its own filesystem that is invisible to the other container's filesystem.
+
+So, we should never store our data in a container file system. - that what volumes are for.
+
+### Persisting data using volumes
+
+#### Volume
+
+A volume is storage outside of the containers. It could be directory on the host or on the cloud
+
+```ps
+# displays help manual.
+$ docker volume --help
+
+# creating shared volume
+$ docker volume create app-data
+
+# view volume information
+$ docker volume inspect app-data
+
+# attaching volume to containers filesystem
+$ docker run -d -p 4000:3000 -v app-data:/app/data <image>
+```
+
+volumes are right way to persist data in out dockerize applications, because we have different lifecycle for containers.
+
+We can share volumes among different containers.
+Deleting a container will not effect the data stored in volumes.
+
+### Copying files between the host and the container.
+
+sometime we want to copy files between the host and the container. For example we have .log file in the container and we have to analyze it on host.
+
+```sh
+$ docker cp <source> <destination>
+
+# copy file from container to host
+$ docker cp <contaainer>:/path/app.log ~/temp
+
+# copy file from host to container
+$ docker cp ./secret.txt <container>:/path/
+```
+
+### Sharing source code
+
+Publishing changes
+
+- For production build a new image, tag it properly, and then deploy it.
+
+when developing the application and if we want some change let say we want to change the title of our application. Build image and running it will be very time consumig. Copying the changed files is also pain in the butt when we are running multiple containers of the image.
+
+The easy approch is to bind the host filesystem dirs to container's file system dirs. So this way when we change any file in host directory it is automatically reflected in the corresponding containers
+
+```sh
+# binding host file system with container's filesytems.
+$ docker run -d -p 5000:3000 -v $(pwd):/app <image>
+```
+
+#### Section Summary
+
+Running containers
+
+```sh
+$ docker run <image>
+$ docker run -d <image>              # run in the background
+$ docker run —name <name> <image>    # to give a custom name
+$ docker run —p 3000:3000 <image>    # to publish a port HOST:CONTAINER
+```
+
+Listing containers
+
+```sh
+$ docker ps      # to list running containers
+$ docker ps -a   # to list all containers
+```
+
+Viewing the logs
+
+```sh
+$ docker logs <containerID>
+$ docker logs -f <containerID>       # to follow the log
+$ docker logs —t <containerID>       # to add timestamps
+$ docker logs —n 10 <containerID>    # to view the last 10 lines
+```
+
+Executing commands in running containers
+
+```sh
+$ docker exec <containerID> <cmd>
+$ docker exec -it <containerID> sh   # to start a shell
+```
+
+Starting and Stopping containers.
+
+```sh
+$ docker stop <containerID>
+$ docker start <containerID>
+```
+
+Removing Containers
+
+```sh
+$ docker container rm <containerID>
+$ docker rm <containerID>
+$ docker rm -f <containerID>        # to force the removal
+$ docker container prune            # to remove stopped containers
+```
+
+Volumes
+
+````sh
+$ docker volume ls
+$ docker volume create app-data
+$ docker volume inspect app-data
+$ docker run -v app-data:/app/data <image>```
+
+Copying files between host and container
+```sh
+$ docker cp <containerID>:/app/log.txt .
+$ docker cp secret.txt <containerID>:/app
+````
+
+Sharing source code with containers
+
+```sh
+$ docker run -v $(pwd)/src:/app/src <image>
+```
+
 ## Running multi container application
 
 ## Deploying application
