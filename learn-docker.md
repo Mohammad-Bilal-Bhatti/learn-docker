@@ -1126,4 +1126,54 @@ $ docker run -v $(pwd)/src:/app/src <image>
 
 ## Running multi container application
 
+Real world scenario
+- backend
+- frontend
+- database
+
+In this section
+- Docker compose - for building and running multi container application
+- Docker networking
+- Database migration
+- Running automated tests 
+
+
+docker compose
+- it is a tool based on top of docker engine
+
+follow the installation guide according to os you have
+https://docs.docker.com/compose/install/
+
+Cleaning up workspace...
+
+```sh
+# list docker images ids only
+$ docker image ls -q
+
+$ docker image rm $(docker image ls -q)
+
+# forcely removes all the running and stopped containers.
+$ docker container rm -f $(docker container ls -aq)
+
+```
+
+
+Sample web application
+- backend
+- frontend
+- database
+
+project structure for web-apps workspace
+- /root
+    /backend
+    /frontend
+    docker-compose.yml
+
+
+
+
+
+
+
+
 ## Deploying application
