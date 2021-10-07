@@ -1028,10 +1028,10 @@ sometime we want to copy files between the host and the container. For example w
 $ docker cp <source> <destination>
 
 # copy file from container to host
-$ docker cp <contaainer>:/path/app.log ~/temp
+$ docker cp <container-id>:/path/app.log ~/temp
 
 # copy file from host to container
-$ docker cp ./secret.txt <container>:/path/
+$ docker cp ./secret.txt <container-id>:/path/
 ```
 
 ### Sharing source code
@@ -1048,6 +1048,10 @@ The easy approch is to bind the host filesystem dirs to container's file system 
 # binding host file system with container's filesytems.
 $ docker run -d -p 5000:3000 -v $(pwd):/app <image>
 ```
+
+Note:
+By this way we can simutaniously code and run container at the same time. When ever we change file it is reflected in the container.
+
 
 #### Section Summary
 
@@ -1105,7 +1109,8 @@ Volumes
 $ docker volume ls
 $ docker volume create app-data
 $ docker volume inspect app-data
-$ docker run -v app-data:/app/data <image>```
+$ docker run -v app-data:/app/data <image>
+```
 
 Copying files between host and container
 ```sh
