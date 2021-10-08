@@ -1052,7 +1052,6 @@ $ docker run -d -p 5000:3000 -v $(pwd):/app <image>
 Note:
 By this way we can simutaniously code and run container at the same time. When ever we change file it is reflected in the container.
 
-
 #### Section Summary
 
 Running containers
@@ -1127,18 +1126,20 @@ $ docker run -v $(pwd)/src:/app/src <image>
 ## Running multi container application
 
 Real world scenario
+
 - backend
 - frontend
 - database
 
 In this section
+
 - Docker compose - for building and running multi container application
 - Docker networking
 - Database migration
-- Running automated tests 
-
+- Running automated tests
 
 docker compose
+
 - it is a tool based on top of docker engine
 
 follow the installation guide according to os you have
@@ -1157,23 +1158,182 @@ $ docker container rm -f $(docker container ls -aq)
 
 ```
 
-
 Sample web application
+
 - backend
 - frontend
 - database
 
 project structure for web-apps workspace
+
 - /root
-    /backend
-    /frontend
-    docker-compose.yml
+  /backend
+  /frontend
+  docker-compose.yml
 
+After installing docker-compose you can start the backend, frontend and db by issuing only single command
 
+```sh
+$ docker-compose up
+```
 
+Now, imagine life without docker. Is some one gives you entire application with frontend, backend, and database. You have to installed required softwares and project dependencies for eg. you have to download node.js environment,have to install mongodb and other tools as well
 
+docker-compose.yml is quite helpfull when you have multi container application.
 
+all we have to do is to run single command $ docker-compose up
 
+json vs yml
 
+```json
+{
+  "title": "Introduction to Docker",
+  "price": 149,
+  "tags": ["development", "devops"],
+  "author": {
+    "name": "Mosh",
+    "lastname": "Hamadani"
+  }
+}
+```
+
+```yml
+title: Introduction to Docker
+price: 149
+tags:
+  - development
+  - devops
+author:
+  name": Mosh,
+  lastname": Hamadani
+```
+
+Quite often we use json format for exchanging data between different systems. and use yml for creating configuration files. It is important to note that parsing yml files are quite slower as compared to parsing json files.
+
+### Creating Docker Compose files
+
+```yml
+version: "3.8"
+services:
+  frontend:
+    build: ./frontend # command used to build image
+    ports:
+      - 3000:3000
+    environment:
+      DB_URL: mongodb://database/vidly
+  backend:
+    build: ./backend # command used to build image
+    ports:
+      - 3001:3001
+  database:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+volumes:
+  vidly:
+```
+
+the idea behind the services it to tell docker compose how build images of these services and how to run them.
+
+as we know docker-compose is build on top of docker engine, so what functionality provided by docker engine it provides the same. The main difference is that docker-compose instructions are applied as a whole to docker-compoes.yml
+
+```sh
+# display related commands.
+$ docker-compose build --help
+# will build all the images defined in .yml
+$ docker-compose build
+# will build all teh images defined in .yml with no cache
+$ docker-compose build --no-cache
+```
+
+### Starting and Stopping Application
+
+`$ docker-compose up` command is similar as `$ docker run`
+
+```sh
+# display related commands.
+$ docker-compose up --help
+# run the container from images
+$ docker-compose up
+# run the containers from images - with frocefully build images
+$ docker-compose up --build
+# run the container in detached mode.
+$ docker-compose up -d
+# verifying running containers
+$ docker-compose ps
+# stop and remove containers
+$ docker-compose down
+```
+
+### Docker Networking
+
+when we run our container with docker-compose, docker-compose will automatically create a network and add our containers on that network so that containers talk with each other.
+
+To verify
+
+```
+# list docker network list.
+$ docker network ls
+# list running containers.
+$ docker ps
+# attaching to the running container.
+$ docker exec -it <container-id> sh
+# attaching to the running container with different user.
+$ docker exec -it -u root <container-id> sh
+$ ping backend
+or
+$ ping frontend
+```
+
+### Viewing the logs
+
+```sh
+# display logs across all running containers
+$ docker-compose logs
+# displays help
+$ docker-compose logs --help
+# to display seperate logs
+$ docker logs -ft <container-id>
+```
+
+### Publishing live changes
+
+what if we don't want to rebuild our images everytime we do some change in our code... For doing so, we have to do the following
+
+```yml
+  ...
+  volumes:
+    - ./backend:/app # defining the relative path mapping
+```
+
+### Migrating the database
+
+I most of the cases when we release our application we want our application into a perticular shape with some initial data - called database migration.
+
+### Running tests
+
+```yml
+  ...
+  web-tests:
+    image: vidly_web
+    volumes:
+      - ./frontend:/app
+    command: npm test
+```
+
+### Summary Commands
+
+```sh
+$ docker-compose build
+$ docker-compose build --no-cache
+$ docker-compose up
+$ docker-compose up -d
+$ docker-compose up —build
+$ docker-compose down
+$ docker-compose ps
+$ docker-compose logs
+```
 
 ## Deploying application
