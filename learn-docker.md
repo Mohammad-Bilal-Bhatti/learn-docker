@@ -1,7 +1,7 @@
 # Learning Docker
 
 - start-date: 15-sept-2021
-- end-date: ???
+- end-date: 10-oct-2021
 - instructor: Mosh Hamadani
 
 ## Getting started.
@@ -1337,3 +1337,154 @@ $ docker-compose logs
 ```
 
 ## Deploying application
+
+In this section
+
+- Deployment options
+- Getting virtual private servers(VPS)
+- Using docker machine
+- Creating optimized production images
+- Deploying the applications
+
+### Deployment Options
+
+To deploy our dockerize application we have following options
+
+- single host deployment
+- cluster deployment
+
+Single host deployment is really simple but have one problem, if our host machine downs - ultimately our production site will not be accessable.
+
+If we have 1000 or 1000k users single server is unable to handle that load, that is why we use clusters.
+
+Wih clusters we get high availability and scalability
+
+Cluster solution - orchestration tool
+
+- Docker swarm - build-in
+- Kuberneties
+
+### VPS Options
+
+- Digital ocean
+- Google Colud Plateform
+- Microsoft Azure
+- Amazon Web Services
+- etc...
+
+docker-machine is the utility/tool used to connect with VPS of own choice. You can crate virtual machine using command line and talk to the server using ssh and on on...
+
+production configuration
+
+```yml
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ./frontend # command used to build image
+      dockerfile: dockerfile.prod
+    ports:
+      - 80:3000
+    environment:
+      DB_URL: mongodb://database/vidly
+    restart: unless-stopped
+  backend:
+    build: ./backend # command used to build image
+    ports:
+      - 3001:3001
+    restart: unless-stopped
+  database:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+    restart: unless-stopped
+volumes:
+  vidly:
+```
+
+development configuration
+
+```yml
+version: "3.8"
+services:
+  frontend:
+    build: ./frontend # command used to build image
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+    environment:
+      DB_URL: mongodb://database/vidly
+    web-tests:
+      image: frontend
+      volumes:
+        - ./frontend:/app
+      command: npm test
+  backend:
+    build: ./backend # command used to build image
+    ports:
+      - 3001:3001
+  database:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+volumes:
+  vidly:
+```
+
+### Reducint the image size
+
+```dockerfile
+# Step-1: build state
+FROM node:14.16.0-alpine3.13 AS build-state
+COPY package*.json ./
+WORKDIR /app
+RUN npm install
+RUN npm build
+
+# Step-2: production state
+FROM nginx:1.12-alpine AS production-state
+RUN addgroup add && adduser -S -G app app
+USER app
+COPY --from=build-stage /app/build /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;" ]
+```
+
+building production optimized builds
+
+```sh
+$ docker build -t optimized-build -f dockerfile.prod .
+```
+
+the last dot represent the build context
+-f denotes the docker file path
+
+### Trouble shooting
+
+```sh
+# list the configured machines: production | staging | test
+$ docker-machine ls
+# print the environment variable of the target machine
+$ docker-machine env vidly
+# by running the following command our docker client will communicate with the specified docker engine on target machine
+$ eval $(docker-machine env vidly)
+$ docker-compose up
+```
+
+### Tagging images properly
+
+```yml
+service:
+  backend:
+    build: ./backend
+    image: your-image-name-v1.0.9 # tagging images with right names on machines.
+```
+
+## Certificate of completition
+
+![certificate-of--docker-course-completition](./certificate.png "completition certificate")
